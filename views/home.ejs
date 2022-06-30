@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home - Crypto Exchange With Websockets</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/new/style.css">
+    <link rel="stylesheet" href="https://ussext.jjonlinesystems.com/zahid/chat_system/asset/css/model.css">
+    <!-- Font Awesome File -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ussext.jjonlinesystems.com/zahid/chat_system/asset/js/model.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="/js/moment.js"></script>
+</head>
+
+<body style="height:100%; ">
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="position: absolute !important;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <% if(typeof error !== 'undefined'){ %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+
+
+        <form class="form-horizontal" role="form" action="/signup" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Register User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Login ID</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="ID" name="user_name" id="user_name">
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">First Name *</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="First Name" name="first_name" id="first_name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Last Name *</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="First Name" name="last_name" id="last_name">
+                            </div>
+
+                            <label for="inputEmail3" class="col-sm-2 control-label">Password *</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" placeholder="password" name="user_password" id="user_password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Phone No. *</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Phone No" name="phone_no" id="phone_no">
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">Email *</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="E-mail" name="user_email" id="user_email">
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="register-user">Register</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<!-- Modal-End -->
+<div class="container-fluid">
+    <div class="row app-one">
+
+        <div class="col-sm-3 side">
+            <div class="side-one">
+                <!-- Heading -->
+                <div class="row heading">
+                    <div class="col-sm-3 col-xs-3 heading-avatar">
+                        <div class="heading-avatar-icon">
+                            <img src="https://www.livechatinc.com/wp-content/themes/livechat2.0/media/img/devices/mac/livechat-macosx-application.png">
+                        </div>
+                    </div>
+
+                    <div id="flip" class="col-sm-1 col-xs-1  heading-dot  pull-right ">
+                        <i  class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+                    </div>
+                    <!---->
+                    <div id="panel">
+                        <ul class="_2imug">
+
+
+                            <a href="https://ussext.jjonlinesystems.com/zahid/chat_system/index.php/admin/scan_qr" target="_blank">
+                                <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Scan QR</div></li>
+                            </a>
+                            <a href="https://ussext.jjonlinesystems.com/zahid/chat_system/index.php/admin/contacts" rel="modal:open">
+                                <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Add Contacts</div></li>
+                            </a>
+                            <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
+                                <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Sign Up</div></li>
+                            </a>
+
+                            <a href="https://ussext.jjonlinesystems.com/zahid/chat_system/index.php/admin/agents" rel="modal:open" id="load_agents_record">
+                                <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Agents Record</div></li>
+                            </a>
+                            <a href="https://ussext.jjonlinesystems.com/zahid/chat_system/index.php/admin/client" rel="modal:open">
+                                <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Clients Record</div></li>
+                            </a>
+                            <% if(typeof username !== 'undefined'){ %>
+                                <a href="https://ussext.jjonlinesystems.com/zahid/chat_system/index.php/admin/logout">
+                                    <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out"><a href="/logout">Log out</a></div></li>
+                                </a>
+                            <% } %>
+
+                        </ul>
+                    </div>
+                    <!----->
+                    <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
+                        <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <!-- Heading End -->
+
+                <!-- SearchBox -->
+                <div class="row searchBox">
+                    <div class="col-sm-12 searchBox-inner">
+                        <div class="form-group has-feedback">
+                            <input id="searchText" type="text" class="form-control" name="searchText" placeholder="Search">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Box End -->
+                <!-- sideBar -->
+                <input type="hidden" id="userid" name="userid" value="<%= userid %>" />
+                <input type="hidden" id="user_name" name="user_name" value="<%= username %>" />
+                <input type="hidden" id="phone_no" name="phone_no" value="<%= phone_no %>" />
+                <input type="hidden" id="receiver_user_name" name="receiver_user_name" value="" />
+                <input type="hidden" id="receiver_id" name="receiver_id" value="" />
+                <input type="hidden" id="chat_type" name="chat_type" value="" />
+                <input type="hidden" id="room_name" name="room_name" value="" />
+
+                <div class="row sideBar" id="users_list">
+
+
+                    <!--<div class="row sideBar-body">-->
+                        <!--<div class="col-sm-3 col-xs-3 sideBar-avatar">-->
+                            <!--<div class="avatar-icon">-->
+                                <!--<img src="https://www.livechatinc.com/wp-content/themes/livechat2.0/media/img/devices/mac/livechat-macosx-application.png">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div onClick="get_detail('573506664078','Adnan Developer')" class="col-sm-9 col-xs-9 sideBar-main">-->
+                            <!--<div class="row">-->
+                                <!--<div class="col-sm-8 col-xs-8 sideBar-name">-->
+                                    <!--<span class="name-meta"></span>-->
+                                    <!--<span class="name-meta">Adnan Developer</span>-->
+                                    <!--<br>-->
+                                    <!--<span class="number-meta">573506664078 </span>-->
+                                <!--</div>-->
+                                <!--<span class="badge badge-light">4</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="row sideBar-body">-->
+                        <!--<div class="col-sm-3 col-xs-3 sideBar-avatar">-->
+                            <!--<div class="avatar-icon">-->
+                                <!--<img src="https://www.livechatinc.com/wp-content/themes/livechat2.0/media/img/devices/mac/livechat-macosx-application.png">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div onClick="get_detail('923004006499','Asad-ul-Islam')" class="col-sm-9 col-xs-9 sideBar-main">-->
+                            <!--<div class="row">-->
+                                <!--<div class="col-sm-8 col-xs-8 sideBar-name">-->
+                                    <!--<span class="name-meta">Asad-ul-Islam</span>-->
+                                    <!--<br>-->
+                                    <!--<span class="number-meta">923004006499</span>-->
+                                <!--</div>-->
+                                <!--<span class="badge badge-light">2</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+
+                </div>
+                <!-- Sidebar End -->
+            </div>
+            <div class="side-two">
+
+                <!-- Heading -->
+                <div class="row newMessage-heading">
+                    <div class="row newMessage-main">
+                        <div class="col-sm-2 col-xs-2 newMessage-back">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-sm-10 col-xs-10 newMessage-title">
+                            New Chat
+                        </div>
+                    </div>
+                </div>
+                <!-- Heading End -->
+
+                <!-- ComposeBox -->
+                <div class="row composeBox">
+                    <div class="col-sm-12 composeBox-inner">
+                        <div class="form-group has-feedback">
+                            <input id="composeText" type="text" class="form-control" name="searchText" placeholder="Search People">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- ComposeBox End -->
+
+                <!-- sideBar -->
+                <div class="row compose-sideBar">
+                    <div class="row sideBar-body">
+                        <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                            <div class="avatar-icon">
+                                <img src="https://www.livechatinc.com/wp-content/themes/livechat2.0/media/img/devices/mac/livechat-macosx-application.png">
+                            </div>
+                        </div>
+                        <div class="col-sm-9 col-xs-9 sideBar-main">
+                            <div class="row">
+                                <div class="col-sm-8 col-xs-8 sideBar-name">
+                    <span class="name-meta">Ankit Jain
+                  </span>
+                                </div>
+                                <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                    <span class="time-meta pull-right">18:18
+                  </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Sidebar End -->
+        </div>
+
+        <!-- New Message Sidebar End -->
+
+        <!-- Conversation Start -->
+
+        <div class="col-sm-9 default_display">
+            &nbsp;
+        </div>
+
+        <div class="col-sm-9 conversation" style="display: none;">
+            <!-- Heading -->
+            <div class="row heading">
+                <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+                    <div class="heading-avatar-icon">
+                        <img src="https://www.livechatinc.com/wp-content/themes/livechat2.0/media/img/devices/mac/livechat-macosx-application.png">
+                    </div>
+                </div>
+                <div class="col-sm-8 col-xs-7 heading-name">
+                    <!-- Here Name will present -->
+                    <a class="heading-name-meta"></a>
+                    <span class="heading-online">Online</span>
+                </div>
+                <div id="flip2" class="col-sm-1 col-xs-1  heading-dot pull-right">
+                    <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+                </div>
+
+                <div id="panel2">
+                    <ul class="_2imug">
+                        <li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="New group">New group</div></li><li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Profile" onClick="showCol-md-3-c();">Profile</div></li><li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Archived">Archived</div></li><li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Starred">Starred</div></li><li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Settings">Settings</div></li><li tabindex="-1" class="_3L0q3 _167q _36Zz0" data-animate-dropdown-item="true" style="opacity: 1;"><div class="Pm0Ov _34D8D" role="button" title="Log out">Log out</div></li>
+
+                    </ul>
+                </div>
+
+                <div class="col-md-3-c" style="display: none;">
+                    <div class="pro-info">
+                        <div class="header-pro">
+                            <div onClick="hideCol-md-3-c();" class="fa fa-close"> <span class="info-text">Contact Info</span></div>
+                        </div>
+                        <div class="main-pix"><div class="pic-container pic-medium pic-circle">
+                                <img class="pic" src="Jeff-Gurr-Headshot.jpg" alt="">
+
+                            </div>
+                            <span class="nam-usr">Muhammad Zahid</span>
+                        </div>
+                        <div class="user-detail">
+                            <form>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Example label</label>
+                                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput2">Another label</label>
+                                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                                </div>
+                            </form>
+                            <button type="button" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--------------------------------------------->
+                <div id="flip3" class="rAUz7 _3TbsN"><div role="button" title="Attach"><span data-icon="clip" class=""><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="#263238" fill-opacity=".5" d="M1.816 15.556v.002c0 1.502.584 2.912 1.646 3.972s2.472 1.647 3.974 1.647a5.58 5.58 0 0 0 3.972-1.645l9.547-9.548c.769-.768 1.147-1.767 1.058-2.817-.079-.968-.548-1.927-1.319-2.698-1.594-1.592-4.068-1.711-5.517-.262l-7.916 7.915c-.881.881-.792 2.25.214 3.261.959.958 2.423 1.053 3.263.215l5.511-5.512c.28-.28.267-.722.053-.936l-.244-.244c-.191-.191-.567-.349-.957.04l-5.506 5.506c-.18.18-.635.127-.976-.214-.098-.097-.576-.613-.213-.973l7.915-7.917c.818-.817 2.267-.699 3.23.262.5.501.802 1.1.849 1.685.051.573-.156 1.111-.589 1.543l-9.547 9.549a3.97 3.97 0 0 1-2.829 1.171 3.975 3.975 0 0 1-2.83-1.173 3.973 3.973 0 0 1-1.172-2.828c0-1.071.415-2.076 1.172-2.83l7.209-7.211c.157-.157.264-.579.028-.814L11.5 4.36a.572.572 0 0 0-.834.018l-7.205 7.207a5.577 5.577 0 0 0-1.645 3.971z"></path></svg></span></div><span><div class="_3ZRwN"><div tabindex="-1" class="XhRTI" style="transform-origin: left top;"><ul class="_2imug">
+				<li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="image" class=""><svg id="image-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 53" enable-background="new 0 0 53 53" width="53" height="53"><filter height="130%" id="image-dropshadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"></feGaussianBlur><feOffset dy="2" result="offsetblur"></feOffset><feComponentTransfer><feFuncA slope=".08" type="linear"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><defs><circle id="image-SVGID_1_" cx="26.5" cy="26.5" r="25.5"></circle></defs><clipPath id="image-SVGID_2_"><use xlink:href="#image-SVGID_1_" overflow="visible"></use></clipPath><g clip-path="url(#image-SVGID_2_)"><path fill="#8333A3" d="M54.1 23.5H35.3v-2.4c0-1-.8-1.8-1.8-1.8H19.2c-.9 0-1.7.8-1.7 1.8v10.7c0 1 .8 1.8 1.8 1.8h14.2c.4 0 .8-.2 1.2-.4L42 48.8c6.7-3.6 12.1-13.2 12.1-25.3z"></path><path fill="#702A8C" d="M33.6 33.6l-7-.1-10.6 18c4.4 2.4 17 4.5 27-2.6l-8.3-15.7c-.3.3-.7.4-1.1.4z"></path><path fill="#9A37A3" d="M19.3 33.6c-1 0-1.8-.8-1.8-1.8l.1-1.5-18.7-.3c1.5 9.4 8.9 18.6 17.5 22l10.7-18.4h-7.8z"></path><path fill="#CE64DE" d="M17.6 21.2c0-.9 1.1-1.7 2-1.8L11.7 4.2C6.4 7.1-.8 12.9-1.1 30.8l18.7-.1v-9.5z"></path><path fill="#BF59CF" d="M19.3 19.4l9.5.4 9.8-17.3C33.3-.7 21.4-3 10.7 4.6l8.6 14.8z"></path><path fill="#AC44CF" d="M38.5 1.8L28.4 19.4h5.2c1 0 1.8.8 1.8 1.8l-.4 2.7 19.1-.1c-1-9.2-7.6-18.1-15.6-22z"></path></g><path fill="#F5F5F5" filter="url(#image-dropshadow)" d="M33.9 33.9H19.1c-1 0-1.9-.8-1.9-1.9V21c0-1 .8-1.9 1.9-1.9h14.8c1 0 1.9.8 1.9 1.9v11c-.1 1.1-.9 1.9-1.9 1.9zm-2.2-12c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8 1.8-.8 1.8-1.8-.8-1.8-1.8-1.8zm1.9 8L28.9 27l-2.4 1.2-4.7-3.5-2.4 2.3v4.7h14.2v-1.8z"></path></svg></span><input accept="image/*,video/mp4,video/3gpp,video/quicktime" type="file" multiple style="display: none;"></button></li>
+				<li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="camera" class="">
+                </span></button></li></ul></div></div></span></div>
+                <div id="panel3" class="_3ZRwN"><div tabindex="-1" class="XhRTI" style="transform-origin: left top;"><ul class="_2imug"><li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="image" class=""><svg id="image-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 53" enable-background="new 0 0 53 53" width="53" height="53"><filter height="130%" id="image-dropshadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"></feGaussianBlur><feOffset dy="2" result="offsetblur"></feOffset><feComponentTransfer><feFuncA slope=".08" type="linear"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><defs><circle id="image-SVGID_1_" cx="26.5" cy="26.5" r="25.5"></circle></defs><clipPath id="image-SVGID_2_"><use xlink:href="#image-SVGID_1_" overflow="visible"></use></clipPath><g clip-path="url(#image-SVGID_2_)"><path fill="#8333A3" d="M54.1 23.5H35.3v-2.4c0-1-.8-1.8-1.8-1.8H19.2c-.9 0-1.7.8-1.7 1.8v10.7c0 1 .8 1.8 1.8 1.8h14.2c.4 0 .8-.2 1.2-.4L42 48.8c6.7-3.6 12.1-13.2 12.1-25.3z"></path><path fill="#702A8C" d="M33.6 33.6l-7-.1-10.6 18c4.4 2.4 17 4.5 27-2.6l-8.3-15.7c-.3.3-.7.4-1.1.4z"></path><path fill="#9A37A3" d="M19.3 33.6c-1 0-1.8-.8-1.8-1.8l.1-1.5-18.7-.3c1.5 9.4 8.9 18.6 17.5 22l10.7-18.4h-7.8z"></path><path fill="#CE64DE" d="M17.6 21.2c0-.9 1.1-1.7 2-1.8L11.7 4.2C6.4 7.1-.8 12.9-1.1 30.8l18.7-.1v-9.5z"></path><path fill="#BF59CF" d="M19.3 19.4l9.5.4 9.8-17.3C33.3-.7 21.4-3 10.7 4.6l8.6 14.8z"></path><path fill="#AC44CF" d="M38.5 1.8L28.4 19.4h5.2c1 0 1.8.8 1.8 1.8l-.4 2.7 19.1-.1c-1-9.2-7.6-18.1-15.6-22z"></path></g><path fill="#F5F5F5" filter="url(#image-dropshadow)" d="M33.9 33.9H19.1c-1 0-1.9-.8-1.9-1.9V21c0-1 .8-1.9 1.9-1.9h14.8c1 0 1.9.8 1.9 1.9v11c-.1 1.1-.9 1.9-1.9 1.9zm-2.2-12c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8 1.8-.8 1.8-1.8-.8-1.8-1.8-1.8zm1.9 8L28.9 27l-2.4 1.2-4.7-3.5-2.4 2.3v4.7h14.2v-1.8z"></path></svg></span><input accept="image/*,video/mp4,video/3gpp,video/quicktime" type="file" multiple style="display: none;"></button></li><li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="camera" class=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 53" enable-background="new 0 0 53 53" width="53" height="53"><filter height="130%" id="camera-dropshadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"></feGaussianBlur><feOffset dy="2" result="offsetblur"></feOffset><feComponentTransfer><feFuncA slope=".08" type="linear"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><defs><circle id="camera-SVGID_1_" cx="26.5" cy="26.5" r="25.5"></circle></defs><clipPath id="camera-SVGID_2_"><use xlink:href="#camera-SVGID_1_" overflow="visible"></use></clipPath><g clip-path="url(#camera-SVGID_2_)"><path fill="#4E5DA9" d="M33.7 33.7l-6.9-.3-11.9 18.4c5.9 3.6 19.8 4.4 28.8-3.2L35 32.8c-.3.2-.8.9-1.3.9z"></path><path fill="#92C654" d="M19.2 33.7c-1 0-1.8-.8-1.8-1.8v-1.6l-19-.5c.1 12 8.7 20 17.4 23.5l11.3-19.5h-7.9z"></path><path fill="#FEC226" d="M17.4 21.1c0-.9 1-1.8 1.9-1.9L10.9 4.1C4.2 7.1-1.8 16.9-1.7 30.9h19.1v-9.8z"></path><path fill="#F47B34" d="M19.2 19.3l9.2.4L39.6 1.8C36.4-.7 20.9-4.6 10.1 3.4l9.1 15.9z"></path><path fill="#DE5144" d="M39 .8L28.4 19.3h5.3c1 0 1.8.8 1.8 1.8l-.3 3.1h19.5C54.2 12.6 47.2 4.8 39 .8z"></path><path fill="#5D84C3" d="M54.7 23.5H35.5v-2.4c0-1-.8-1.8-1.8-1.8H19.1c-.9 0-1.7.8-1.7 1.8V32c0 1 .8 1.8 1.8 1.8h14.5c.4 0 .8-.2 1.2-.4l8.4 15.7c11.5-8.2 11.5-24.5 11.4-25.6z"></path></g><path fill="#F5F5F5" filter="url(#camera-dropshadow)" d="M33.8 34H18c-.9 0-1.6-.7-1.6-1.6v-11c0-.3.2-.7.4-.9l2.2-2.4c.2-.2.6-.4.9-.4h2.6c.3 0 .7.2.9.4l1.4 1.5h9c.9 0 1.6.7 1.6 1.6v11.2c0 .9-.7 1.6-1.6 1.6zm-7.9-11.9c-2.6 0-4.7 2.1-4.7 4.7s2.1 4.7 4.7 4.7 4.7-2.1 4.7-4.7-2.1-4.7-4.7-4.7zm0 8c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3-1.5 3.3-3.3 3.3z"></path></svg></span></button></li><li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="document" class=""><svg id="document-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 53" enable-background="new 0 0 53 53" width="53" height="53"><filter height="130%" id="document-dropshadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"></feGaussianBlur><feOffset dy="2" result="offsetblur"></feOffset><feComponentTransfer><feFuncA slope=".08" type="linear"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><defs><circle id="document-SVGID_1_" cx="26.5" cy="26.5" r="25.5"></circle></defs><clipPath id="document-SVGID_2_"><use xlink:href="#document-SVGID_1_" overflow="visible"></use></clipPath><g clip-path="url(#document-SVGID_2_)"><path fill="#5157AE" d="M26.5-1.1C11.9-1.1-1.1 5.6-1.1 27.6h55.2c-.1-19-13-28.7-27.6-28.7z"></path><path fill="#5F66CD" d="M53 26.5H-1.1c0 14.6 13 27.6 27.6 27.6s27.6-13 27.6-27.6H53z"></path></g><path fill="#F5F5F5" filter="url(#document-dropshadow)" d="M21.4 16.3c-1.1 0-2 .9-2 2v15.6c0 1.1.9 2 2 2h11.7c1.1 0 2-.9 2-2V22.1l-5.9-5.9-7.8.1zm6.8 6.1v-4.7l5.4 5.4h-4.8c-.4 0-.6-.3-.6-.7z"></path></svg></span><input accept="*" type="file" multiple style="display: none;"></button></li><li tabindex="-1" class="_3L0q3 _167q _1Fc0v" data-animate-dropdown-item="true"><button class="_1azEi" data-animate-menu-icons-item="true" style="opacity: 1; transform: translateY(0%) scaleX(1) scaleY(1);"><span data-icon="contact" class=""><svg id="contact-Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 53" enable-background="new 0 0 53 53" width="53" height="53"><filter height="130%" id="contact-dropshadow"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"></feGaussianBlur><feOffset dy="2" result="offsetblur"></feOffset><feComponentTransfer><feFuncA slope=".08" type="linear"></feFuncA></feComponentTransfer><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><defs><circle id="contact-SVGID_1_" cx="26.5" cy="26.5" r="25.5"></circle></defs><clipPath id="contact-SVGID_2_"><use xlink:href="#contact-SVGID_1_" overflow="visible"></use></clipPath><g clip-path="url(#contact-SVGID_2_)"><path fill="#0A7BBF" d="M26.5-1.1C11.9-1.1-1.1 5.6-1.1 27.6h55.2c-.1-19-13-28.7-27.6-28.7z"></path><path fill="#09ABF4" d="M53 26.5H-1.1c0 14.6 13 27.6 27.6 27.6s27.6-13 27.6-27.6H53z"></path></g><path fill="#F5F5F5" filter="url(#contact-dropshadow)" d="M26.5 26.1c-2.5 0-4.6-2-4.6-4.6 0-2.5 2-4.6 4.6-4.6 2.5 0 4.6 2 4.6 4.6s-2.1 4.6-4.6 4.6zm-.2 8.4h-8.9V32c0-.4.1-.8.4-1.1 1.3-1.3 4.6-2.4 8.5-2.4s7.3 1.1 8.7 2.4c.3.3.6.7.6 1.1v2.5h-9.3z"></path></svg></span></button></li></ul></div></div>
+                <!----------------------------------------------->
+
+
+            </div>
+            <!-- Heading End -->
+
+            <!-- Message Box -->
+            <div class="row message-bg" id="conversation" style="">
+
+                <!-- Header show Previous Message -->
+                <div class="row message-previous" style="display: none;">
+                    <div class="col-sm-12 previous">
+                        <a onclick="previous(this)" id="ankitjain28" name="20">Show Previous Message!</a>
+                    </div>
+                </div>
+                <div class="row message-main">
+                    <!-- Text messages / Chat goes here !-->
+                </div>
+            </div>
+            <!-- Message Box End -->
+
+            <!-- Reply Box -->
+            <div class="row reply">
+                <div class="col-sm-1 col-xs-1 reply-emojis">
+                    <i class="fa fa-smile-o fa-2x"></i>
+                </div>
+                <div style='border:solid 1px #dcf8c6' class="col-sm-9 col-xs-9 reply-main">
+                    <input type="hidden" id="selected_user">
+                    <textarea class="form-control" rows="1" id="comment" name="comment"></textarea>
+                </div>
+                <div class="col-sm-1 col-xs-1 reply-recording">
+                    <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+                </div>
+                <div class="col-sm-1 col-xs-1 reply-send">
+                    <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+                </div>
+            </div>
+            <span id="scroll"></span>
+            <!-- Reply Box End -->
+        </div>
+        <!-- Conversation End -->
+    </div>
+    <!-- App One End -->
+</div>
+
+<!-- App End -->
+
+<script>
+    $(".heading-compose").click(function() {
+        $(".side-two").css({
+            "left": "0"
+        });
+    });
+
+    $(".newMessage-back").click(function() {
+        $(".side-two").css({
+            "left": "-100%"
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        $("#flip").click(function(){
+            $("#panel").slideToggle("slow");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#flip2").click(function(){
+            $("#panel2").slideToggle("slow");
+        });
+    });
+
+    $(document).ready(function(){
+        $("#flip3").click(function(){
+            $("#panel3").slideToggle("slow");
+        });
+    });
+</script>
+
+<script src="/js/chat.js"></script>
+
+</body>
+
+</html>

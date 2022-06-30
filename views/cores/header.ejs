@@ -1,0 +1,166 @@
+<!-- start: META -->
+<!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta content="" name="description" />
+<meta content="" name="author" />
+<!-- end: META -->
+<!-- start: GOOGLE FONTS -->
+<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+<!-- end: GOOGLE FONTS -->
+<!-- start: MAIN CSS -->
+<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="vendor/themify-icons/themify-icons.min.css">
+<link href="vendor/animate.css/animate.min.css" rel="stylesheet" media="screen">
+<link href="vendor/perfect-scrollbar/perfect-scrollbar.min.css" rel="stylesheet" media="screen">
+<link href="vendor/switchery/switchery.min.css" rel="stylesheet" media="screen">
+<!-- end: MAIN CSS -->
+<!-- start: CLIP-TWO CSS -->
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/plugins.css">
+<link rel="stylesheet" href="css/themes/theme-1.css" id="skin_color" />
+<script src="/js/moment.js"></script>
+<!-- end: CLIP-TWO CSS -->
+<!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
+<!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
+</head>
+<!-- end: HEAD -->
+<body>
+<div id="app">
+    <!-- sidebar -->
+    <div class="sidebar app-aside" id="sidebar">
+        <div class="sidebar-container perfect-scrollbar">
+            <nav>
+                <!-- start: SEARCH FORM -->
+                <div class="search-form">
+                    <a class="s-open" href="#">
+                        <i class="ti-search"></i>
+                    </a>
+                    <form class="navbar-form" role="search">
+                        <a class="s-remove" href="#" target=".navbar-form">
+                            <i class="ti-close"></i>
+                        </a>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn search-button" type="submit">
+                                <i class="ti-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- end: SEARCH FORM -->
+                <!-- start: MAIN NAVIGATION MENU -->
+                <div class="navbar-title">
+                    <span>Main Navigation</span>
+                </div>
+                <ul class="main-navigation-menu">
+                    <li <% if(typeof route_name !== 'undefined' && route_name == 'dashboard') { %> class="active open" <% } %> >
+                        <a href="/dashboard">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-home"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> Dashboard </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li <% if(typeof route_name !== 'undefined' && route_name == 'gain_chart') { %> class="active open" <% } %> >
+                        <a href="/gain_chart">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-pie-chart"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> GAIN CHART </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li <% if(typeof route_name !== 'undefined' && route_name == 'users') { %> class="active open" <% } %> >
+                        <a href="/users">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-pie-chart"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> Users </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+
+                </ul>
+                <!-- end: MAIN NAVIGATION MENU -->
+            </nav>
+        </div>
+    </div>
+    <!-- / sidebar -->
+    <div class="app-content">
+        <!-- start: TOP NAVBAR -->
+        <header class="navbar navbar-default navbar-static-top">
+            <!-- start: NAVBAR HEADER -->
+            <div class="navbar-header">
+                <a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg" class="btn btn-navbar sidebar-toggle" data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
+                    <i class="ti-align-justify"></i>
+                </a>
+                <a class="navbar-brand" href="/dashboard">
+                    <img src="images/logo.png" alt="Clip-Two"/>
+                </a>
+                <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
+                    <i class="ti-align-justify"></i>
+                </a>
+                <a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="ti-view-grid"></i>
+                </a>
+            </div>
+            <!-- end: NAVBAR HEADER -->
+            <!-- start: NAVBAR COLLAPSE -->
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-right">
+
+
+                    <!-- start: USER OPTIONS DROPDOWN -->
+                    <li class="dropdown current-user">
+                        <a href class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="images/avatar-1.jpg" alt=""> <span class="username"> <% if(typeof username !== 'undefined') { %> <%= username %> <% } %> <i class="ti-angle-down"></i></i></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-dark">
+                            <li>
+                                <a href="#.">
+                                    My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                    Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- end: USER OPTIONS DROPDOWN -->
+                </ul>
+                <!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+                <div class="close-handle visible-xs-block menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                    <div class="arrow-left"></div>
+                    <div class="arrow-right"></div>
+                </div>
+                <!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+            </div>
+            <a class="dropdown-off-sidebar sidebar-mobile-toggler hidden-md hidden-lg" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">
+                &nbsp;
+            </a>
+            <a class="dropdown-off-sidebar hidden-sm hidden-xs" data-toggle-class="app-offsidebar-open" data-toggle-target="#app" data-toggle-click-outside="#off-sidebar">
+                &nbsp;
+            </a>
+            <!-- end: NAVBAR COLLAPSE -->
+        </header>
+        <!-- end: TOP NAVBAR -->

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!-- Template Name: Clip-Two - Responsive Admin Template build with Twitter Bootstrap 3.x | Author: ClipTheme -->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- start: HEAD -->
+<head>
+    <title>GAIN CHARTS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+
+    <% include cores/header.ejs %>
+
+    <div class="main-content" >
+        <div class="wrap-content container" id="container">
+            <!-- start: DASHBOARD TITLE -->
+            <section id="page-title" class="padding-top-15 padding-bottom-15" style="">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h1 class="mainTitle">GAIN CHART</h1>
+                        <span class="mainDescription">overview &amp; stats </span>
+                    </div>
+                </div>
+            </section>
+            <!-- end: DASHBOARD TITLE -->
+
+
+            <!-- start: BASIC TABLE -->
+            <div class="container-fluid container-fullw bg-white">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--<h5 class="over-title margin-bottom-15"><span class="text-bold">Gain Chart</span></h5>-->
+
+                        <table class="table table-hover" id="tbl-gain-chart">
+                            <thead>
+                            <tr style="background-color: #bddbff;">
+                                <th class="center">MINUTE</th>
+                                <th>1%</th>
+                                <th>2%</th>
+                                <th>3%</th>
+                                <th>4%</th>
+                                <th>5%</th>
+                                <th>6%</th>
+                                <th>7%</th>
+                                <th>8%</th>
+                                <th>9%</th>
+                                <th>10%</th>
+                                <th>11%</th>
+                                <th>12%</th>
+                                <th>13%</th>
+                                <th>14%</th>
+                                <th>15%</th>
+                                <th>16%</th>
+                                <th>17%</th>
+                                <th>18%</th>
+                                <th>19%</th>
+                                <th>20%</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end: BASIC TABLE -->
+
+            <!-- start: STRIPED ROWS -->
+            <div class="container-fluid container-fullw" id="div-gain-chart-stats1">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="over-title margin-bottom-15" style="color: #d9534f;"><span class="text-bold" id="span_market_gain">MARKET GAIN</span></h5>
+                        <table class="table table-striped table-hover" id="tbl-gain-chart-stats1">
+                            <thead>
+                            <tr style="background-color: #efafaf;">
+                                <th>Sr #</th>
+                                <th>Market</th>
+                                <th>Currency</th>
+                                <th>Current Rate</th>
+                                <th>Start Rate</th>
+                                <th>End Rate</th>
+                                <th>Gain</th>
+                                <th>Gain %</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--<tr>-->
+                                <!--<td>Peter Clark</td>-->
+                            <!--</tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end: STRIPED ROWS -->
+
+
+            <!-- start: CONDENSED TABLE -->
+            <div class="container-fluid container-fullw bg-white" id="div-gain-chart-stats2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="over-title margin-bottom-15" style="color: #d9534f;"><span class="text-bold">CURRENCY GAIN</span></h5>
+                        <table class="table table-condensed table-hover" id="tbl-gain-chart-stats2">
+                            <thead>
+                            <tr style="background-color: #fbdcdc;">
+                                <th class="hidden-xs">Sr #</th>
+                                <th class="hidden-xs">Market</th>
+                                <th class="hidden-xs">Currency</th>
+                                <th class="hidden-xs">Current Rate</th>
+                                <th class="hidden-xs">1hr Gain</th>
+                                <th class="hidden-xs">30min Gain</th>
+                                <th class="hidden-xs">10m Gain</th>
+                                <th class="hidden-xs">5m Gain</th>
+                                <th class="hidden-xs">2m Gain</th>
+                                <th class="hidden-xs">1m Gain</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end: CONDENSED TABLE -->
+
+
+        </div>
+    </div>
+
+     <% include cores/footer.ejs %>
+
+    <script src="/js/gain_chart.js"></script>
