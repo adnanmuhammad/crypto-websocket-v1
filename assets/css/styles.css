@@ -1490,6 +1490,8 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 .main-content {
   min-height: 100%;
   position: relative;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 .main-content .container {
   max-width: none !important;
@@ -1503,6 +1505,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   .main-content {
     margin-top: 65px;
     margin-left: 260px;
+
+    overflow-x: auto;
+    overflow-y: auto;
   }
   .app-navbar-fixed .main-content {
     margin-top: 0;
@@ -1521,6 +1526,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 @media (max-width: 991px) {
   .main-content {
     padding-top: 65px;
+
+    overflow-x: auto;
+    overflow-y: auto;
   }
 }
 
