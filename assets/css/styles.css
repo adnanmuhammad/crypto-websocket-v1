@@ -1495,7 +1495,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 }
 .main-content .container {
   max-width: none !important;
-  width: 100% !important;
+  /*width: 100% !important;*/   /* this is extra commented - you may uncomment this */
   display: inline-block;
 }
 .main-content > .container {
