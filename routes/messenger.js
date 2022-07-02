@@ -246,5 +246,23 @@ router.get('/group_chat', function (req, res, next)
     }
 });
 
+router.get('/gain_table', function (req, res, next)
+{
+    if(req.session && req.session.username) {
+        var data = new Object();
+        if(req.session.username)
+        {
+            data.username = req.session.username;
+            data.userid = req.session.userid;
+            data.phone_no = req.session.phone_no;
+            data.route_name = 'gain_table';
+        }
+
+        res.render('gain_table', data );
+    } else {
+        res.redirect('/login');
+    }
+});
+
 
 module.exports = router;

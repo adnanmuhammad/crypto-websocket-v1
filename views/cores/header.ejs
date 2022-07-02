@@ -83,6 +83,19 @@
                         </a>
                     </li>
 
+                    <li <% if(typeof route_name !== 'undefined' && route_name == 'gain_table') { %> class="active open" <% } %> >
+                        <a href="/gain_table">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-pie-chart"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> GAIN TABLE </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
                     <li <% if(typeof route_name !== 'undefined' && route_name == 'users') { %> class="active open" <% } %> >
                         <a href="/users">
                             <div class="item-content">

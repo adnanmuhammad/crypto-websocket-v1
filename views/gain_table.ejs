@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- Template Name: Clip-Two - Responsive Admin Template build with Twitter Bootstrap 3.x | Author: ClipTheme -->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- start: HEAD -->
+<head>
+    <title>GAIN TABLE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+
+    <style>
+        .cls_td {
+            width: 4%; text-align: center;
+        }
+        .cls_td_negative {
+            width: 4%; text-align: center; font-weight: bold !important;
+        }
+    </style>
+
+    <% include cores/header.ejs %>
+
+    <div class="main-content" >
+        <div class="wrap-content container" id="container">
+            <!-- start: DASHBOARD TITLE -->
+            <section id="page-title" class="padding-top-15 padding-bottom-15" style="">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h1 class="mainTitle">GAIN TABLE</h1>
+                        <span class="mainDescription">overview &amp; stats </span>
+                    </div>
+                </div>
+            </section>
+            <!-- end: DASHBOARD TITLE -->
+
+            <!-- start: CONDENSED TABLE -->
+            <div class="container-fluid container-fullw bg-white" id="div-gain-table">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="over-title margin-bottom-15" style="color: #d9534f;"><span class="text-bold">GAIN TABLE</span></h5>
+                        <table class="table table-condensed table-hover" id="tbl-gain-table">
+                            <thead>
+                            <tr style="background-color: #fbdcdc;">
+                                <th style="width: 5%; text-align: center;">Sr #</th>
+                                <th style="width: 5%;">Currency</th>
+                                <th style="width: 10%; text-align: center;">Gain 20min</th>
+                                <th class="cls_td">1</th>
+                                <th class="cls_td">2</th>
+                                <th class="cls_td">3</th>
+                                <th class="cls_td">4</th>
+                                <th class="cls_td">5</th>
+                                <th class="cls_td">6</th>
+                                <th class="cls_td">7</th>
+                                <th class="cls_td">8</th>
+                                <th class="cls_td">9</th>
+                                <th class="cls_td">10</th>
+                                <th class="cls_td">11</th>
+                                <th class="cls_td">12</th>
+                                <th class="cls_td">13</th>
+                                <th class="cls_td">14</th>
+                                <th class="cls_td">15</th>
+                                <th class="cls_td">16</th>
+                                <th class="cls_td">17</th>
+                                <th class="cls_td">18</th>
+                                <th class="cls_td">19</th>
+                                <th class="cls_td">20</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end: CONDENSED TABLE -->
+
+
+        </div>
+    </div>
+
+     <% include cores/footer.ejs %>
+
+    <script src="/js/gain_table.js"></script>
