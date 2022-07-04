@@ -264,5 +264,41 @@ router.get('/gain_table', function (req, res, next)
     }
 });
 
+router.get('/gain_table_v2', function (req, res, next)
+{
+    if(req.session && req.session.username) {
+        var data = new Object();
+        if(req.session.username)
+        {
+            data.username = req.session.username;
+            data.userid = req.session.userid;
+            data.phone_no = req.session.phone_no;
+            data.route_name = 'gain_table_v2';
+        }
+
+        res.render('gain_table_v2', data );
+    } else {
+        res.redirect('/login');
+    }
+});
+
+router.get('/gain_table_v3', function (req, res, next)
+{
+    if(req.session && req.session.username) {
+        var data = new Object();
+        if(req.session.username)
+        {
+            data.username = req.session.username;
+            data.userid = req.session.userid;
+            data.phone_no = req.session.phone_no;
+            data.route_name = 'gain_table_v3';
+        }
+
+        res.render('gain_table_v3', data );
+    } else {
+        res.redirect('/login');
+    }
+});
+
 
 module.exports = router;

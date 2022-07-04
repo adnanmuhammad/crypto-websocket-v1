@@ -42,9 +42,9 @@ app.use(session({
 
 app.use(
     connection(mysql, {
-        host: '',
+        host: 'crypto-exchange.cvcoxaxglrwq.us-east-1.rds.amazonaws.com',
         user: 'admin',
-        password: '',
+        password: 'sVEH0VWtkOgb7LjGc4A2',
         port: 3306, //port mysql
         database: 'cryptowebsocket'
     }, 'request')
@@ -79,6 +79,8 @@ app.get('/dashboard', messenger);
 
 app.get('/gain_chart', messenger);
 app.get('/gain_table', messenger);
+app.get('/gain_table_v2', messenger);
+//app.get('/gain_table_v3', messenger);
 
 app.post('/get_detail_charts_data', messenger);
 
@@ -926,7 +928,7 @@ io.on('connection', function(socket) {
     }
 
 
-    // =================== update GAIN TABLE ================
+    // =================== update GAIN TABLE 1 MIN - START ================
     socket.on('update_gain_table_data', function(data){
         setInterval(intervalFuncUpdateGainTable, 2000);
     });
@@ -1096,7 +1098,353 @@ io.on('connection', function(socket) {
             }
         });
     }
-    // =================== update GAIN TABLE ================
+    // =================== update GAIN TABLE 1 MIN - END ================
+
+
+    // =================== update GAIN TABLE 5 MIN - START ================
+    socket.on('update_gain_table_data_v2', function(data){
+        setInterval(intervalFuncUpdateGainTableV2, 2000);
+    });
+
+    function intervalFuncUpdateGainTableV2() {
+        //console.log('_________________ADNAN __________________');
+        var sql = " SELECT " +
+            "  cry_fd.symbol, " +
+            "  substring_index(group_concat(cry_fd.open order by id ASC), ',', 1) AS open, " +
+            "  substring_index(group_concat(cry_fd.close order by id DESC), ',', 1) AS close,  " +
+            "  round((((substring_index(group_concat(cry_fd.close order by id DESC), ',', 1) - substring_index(group_concat(cry_fd.open order by id ASC), ',', 1)) / substring_index(group_concat(cry_fd.open order by id ASC), ',', 1)) * 100),6) AS percent_increase,  " +
+            "  100 AS time_interval, " +
+            "  (  " +
+            "  SELECT round((((substring_index(group_concat(crf1.close order by id DESC), ',', 1) - substring_index(group_concat(crf1.open order by id ASC), ',', 1)) / substring_index(group_concat(crf1.open order by id ASC), ',', 1)) * 100),6)  " +
+            "  FROM crypto_feed_extended crf1  " +
+            "  WHERE crf1.start_date >= NOW() - INTERVAL 100 MINUTE " +
+            "  AND crf1.end_date <= DATE_FORMAT(NOW() - INTERVAL 95 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "  AND crf1.symbol = cry_fd.symbol  " +
+            "  ) AS one_min_gain, " +
+            "  ( " +
+            "  SELECT round((((substring_index(group_concat(crf2.close order by id DESC), ',', 1) - substring_index(group_concat(crf2.open order by id ASC), ',', 1)) / substring_index(group_concat(crf2.open order by id ASC), ',', 1)) * 100),6)  " +
+            "  FROM crypto_feed_extended crf2 " +
+            "  WHERE crf2.start_date >= NOW() - INTERVAL 95 MINUTE " +
+            "  AND crf2.end_date <= DATE_FORMAT(NOW() - INTERVAL 90 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "  AND crf2.symbol = cry_fd.symbol " +
+            "  ) AS two_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf3.close order by id DESC), ',', 1) - substring_index(group_concat(crf3.open order by id ASC), ',', 1)) / substring_index(group_concat(crf3.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf3 " +
+            "WHERE crf3.start_date >= NOW() - INTERVAL 90 MINUTE " +
+            "AND crf3.end_date <= DATE_FORMAT(NOW() - INTERVAL 85 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf3.symbol = cry_fd.symbol " +
+            ") AS three_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf4.close order by id DESC), ',', 1) - substring_index(group_concat(crf4.open order by id ASC), ',', 1)) / substring_index(group_concat(crf4.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf4 " +
+            "WHERE crf4.start_date >= NOW() - INTERVAL 85 MINUTE " +
+            "AND crf4.end_date <= DATE_FORMAT(NOW() - INTERVAL 80 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf4.symbol = cry_fd.symbol " +
+            ") AS four_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf5.close order by id DESC), ',', 1) - substring_index(group_concat(crf5.open order by id ASC), ',', 1)) / substring_index(group_concat(crf5.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf5 " +
+            "WHERE crf5.start_date >= NOW() - INTERVAL 80 MINUTE " +
+            "AND crf5.end_date <= DATE_FORMAT(NOW() - INTERVAL 75 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf5.symbol = cry_fd.symbol " +
+            ") AS five_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf6.close order by id DESC), ',', 1) - substring_index(group_concat(crf6.open order by id ASC), ',', 1)) / substring_index(group_concat(crf6.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf6 " +
+            "WHERE crf6.start_date >= NOW() - INTERVAL 75 MINUTE " +
+            "AND crf6.end_date <= DATE_FORMAT(NOW() - INTERVAL 70 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf6.symbol = cry_fd.symbol " +
+            ") AS six_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf7.close order by id DESC), ',', 1) - substring_index(group_concat(crf7.open order by id ASC), ',', 1)) / substring_index(group_concat(crf7.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf7 " +
+            "WHERE crf7.start_date >= NOW() - INTERVAL 70 MINUTE " +
+            "AND crf7.end_date <= DATE_FORMAT(NOW() - INTERVAL 65 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf7.symbol = cry_fd.symbol " +
+            ") AS seven_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf8.close order by id DESC), ',', 1) - substring_index(group_concat(crf8.open order by id ASC), ',', 1)) / substring_index(group_concat(crf8.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf8 " +
+            "WHERE crf8.start_date >= NOW() - INTERVAL 65 MINUTE " +
+            "AND crf8.end_date <= DATE_FORMAT(NOW() - INTERVAL 60 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf8.symbol = cry_fd.symbol " +
+            ") AS eight_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf9.close order by id DESC), ',', 1) - substring_index(group_concat(crf9.open order by id ASC), ',', 1)) / substring_index(group_concat(crf9.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf9 " +
+            "WHERE crf9.start_date >= NOW() - INTERVAL 60 MINUTE " +
+            "AND crf9.end_date <= DATE_FORMAT(NOW() - INTERVAL 55 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf9.symbol = cry_fd.symbol " +
+            ") AS nine_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf10.close order by id DESC), ',', 1) - substring_index(group_concat(crf10.open order by id ASC), ',', 1)) / substring_index(group_concat(crf10.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf10 " +
+            "WHERE crf10.start_date >= NOW() - INTERVAL 55 MINUTE " +
+            "AND crf10.end_date <= DATE_FORMAT(NOW() - INTERVAL 50 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf10.symbol = cry_fd.symbol " +
+            ") AS ten_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf11.close order by id DESC), ',', 1) - substring_index(group_concat(crf11.open order by id ASC), ',', 1)) / substring_index(group_concat(crf11.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf11 " +
+            "WHERE crf11.start_date >= NOW() - INTERVAL 50 MINUTE " +
+            "AND crf11.end_date <= DATE_FORMAT(NOW() - INTERVAL 45 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf11.symbol = cry_fd.symbol " +
+            ") AS eleven_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf12.close order by id DESC), ',', 1) - substring_index(group_concat(crf12.open order by id ASC), ',', 1)) / substring_index(group_concat(crf12.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf12 " +
+            "WHERE crf12.start_date >= NOW() - INTERVAL 45 MINUTE " +
+            "AND crf12.end_date <= DATE_FORMAT(NOW() - INTERVAL 40 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf12.symbol = cry_fd.symbol " +
+            ") AS twelve_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf13.close order by id DESC), ',', 1) - substring_index(group_concat(crf13.open order by id ASC), ',', 1)) / substring_index(group_concat(crf13.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf13 " +
+            "WHERE crf13.start_date >= NOW() - INTERVAL 40 MINUTE " +
+            "AND crf13.end_date <= DATE_FORMAT(NOW() - INTERVAL 35 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf13.symbol = cry_fd.symbol " +
+            ") AS thirteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf14.close order by id DESC), ',', 1) - substring_index(group_concat(crf14.open order by id ASC), ',', 1)) / substring_index(group_concat(crf14.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf14 " +
+            "WHERE crf14.start_date >= NOW() - INTERVAL 35 MINUTE " +
+            "AND crf14.end_date <= DATE_FORMAT(NOW() - INTERVAL 30 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf14.symbol = cry_fd.symbol " +
+            ") AS foutreen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf15.close order by id DESC), ',', 1) - substring_index(group_concat(crf15.open order by id ASC), ',', 1)) / substring_index(group_concat(crf15.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf15 " +
+            "WHERE crf15.start_date >= NOW() - INTERVAL 30 MINUTE " +
+            "AND crf15.end_date <= DATE_FORMAT(NOW() - INTERVAL 25 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf15.symbol = cry_fd.symbol " +
+            ") AS fifteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf16.close order by id DESC), ',', 1) - substring_index(group_concat(crf16.open order by id ASC), ',', 1)) / substring_index(group_concat(crf16.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf16 " +
+            "WHERE crf16.start_date >= NOW() - INTERVAL 25 MINUTE " +
+            "AND crf16.end_date <= DATE_FORMAT(NOW() - INTERVAL 20 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf16.symbol = cry_fd.symbol " +
+            ") AS sixteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf17.close order by id DESC), ',', 1) - substring_index(group_concat(crf17.open order by id ASC), ',', 1)) / substring_index(group_concat(crf17.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf17 " +
+            "WHERE crf17.start_date >= NOW() - INTERVAL 20 MINUTE " +
+            "AND crf17.end_date <= DATE_FORMAT(NOW() - INTERVAL 15 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf17.symbol = cry_fd.symbol " +
+            ") AS seventeen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf18.close order by id DESC), ',', 1) - substring_index(group_concat(crf18.open order by id ASC), ',', 1)) / substring_index(group_concat(crf18.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf18 " +
+            "WHERE crf18.start_date >= NOW() - INTERVAL 15 MINUTE " +
+            "AND crf18.end_date <= DATE_FORMAT(NOW() - INTERVAL 10 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf18.symbol = cry_fd.symbol " +
+            ") AS eighteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf19.close order by id DESC), ',', 1) - substring_index(group_concat(crf19.open order by id ASC), ',', 1)) / substring_index(group_concat(crf19.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf19 " +
+            "WHERE crf19.start_date >= NOW() - INTERVAL 10 MINUTE " +
+            "AND crf19.end_date <= DATE_FORMAT(NOW() - INTERVAL 5 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf19.symbol = cry_fd.symbol " +
+            ") AS nineteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf20.close order by id DESC), ',', 1) - substring_index(group_concat(crf20.open order by id ASC), ',', 1)) / substring_index(group_concat(crf20.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf20 " +
+            "WHERE crf20.start_date >= NOW() - INTERVAL 5 MINUTE " +
+            "AND crf20.end_date <= DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%59') " +
+            "AND crf20.symbol = cry_fd.symbol " +
+            ") AS twenty_min_gain " +
+            "  FROM crypto_feed_extended cry_fd  " +
+            "  WHERE cry_fd.start_date >= NOW() - INTERVAL 100 MINUTE " +
+            "  AND cry_fd.end_date <= NOW() " +
+            "  GROUP BY cry_fd.symbol  " +
+            "  HAVING percent_increase >= 1 " +
+            "  ORDER BY percent_increase DESC ";
+        //console.log(sql +' _________________ ');
+        db_connection.query(sql, function (err, rows) {
+            if (rows.length) {
+                json_data = JSON.stringify(rows);
+                //json_data = JSON.parse(json_data);
+                //console.log(json_data+' <br><br>');
+
+                io.emit('fetch_gain_table_data_v2', json_data);
+            }
+        });
+    }
+    // =================== update GAIN TABLE 5 MIN - END ================
+
+    // =================== update GAIN TABLE 10 MIN - START ================
+    socket.on('update_gain_table_data_v3', function(data){
+        setInterval(intervalFuncUpdateGainTableV3, 2000);
+    });
+
+    function intervalFuncUpdateGainTableV3() {
+        //console.log('_________________ADNAN __________________');
+        var sql = " SELECT " +
+            "  cry_fd.symbol, " +
+            "  substring_index(group_concat(cry_fd.open order by id ASC), ',', 1) AS open, " +
+            "  substring_index(group_concat(cry_fd.close order by id DESC), ',', 1) AS close,  " +
+            "  round((((substring_index(group_concat(cry_fd.close order by id DESC), ',', 1) - substring_index(group_concat(cry_fd.open order by id ASC), ',', 1)) / substring_index(group_concat(cry_fd.open order by id ASC), ',', 1)) * 100),6) AS percent_increase,  " +
+            "  200 AS time_interval, " +
+            "  (  " +
+            "  SELECT round((((substring_index(group_concat(crf1.close order by id DESC), ',', 1) - substring_index(group_concat(crf1.open order by id ASC), ',', 1)) / substring_index(group_concat(crf1.open order by id ASC), ',', 1)) * 100),6)  " +
+            "  FROM crypto_feed_extended crf1  " +
+            "  WHERE crf1.start_date >= NOW() - INTERVAL 200 MINUTE " +
+            "  AND crf1.end_date <= DATE_FORMAT(NOW() - INTERVAL 190 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "  AND crf1.symbol = cry_fd.symbol  " +
+            "  ) AS one_min_gain, " +
+            "  ( " +
+            "  SELECT round((((substring_index(group_concat(crf2.close order by id DESC), ',', 1) - substring_index(group_concat(crf2.open order by id ASC), ',', 1)) / substring_index(group_concat(crf2.open order by id ASC), ',', 1)) * 100),6)  " +
+            "  FROM crypto_feed_extended crf2 " +
+            "  WHERE crf2.start_date >= NOW() - INTERVAL 190 MINUTE " +
+            "  AND crf2.end_date <= DATE_FORMAT(NOW() - INTERVAL 180 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "  AND crf2.symbol = cry_fd.symbol " +
+            "  ) AS two_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf3.close order by id DESC), ',', 1) - substring_index(group_concat(crf3.open order by id ASC), ',', 1)) / substring_index(group_concat(crf3.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf3 " +
+            "WHERE crf3.start_date >= NOW() - INTERVAL 180 MINUTE " +
+            "AND crf3.end_date <= DATE_FORMAT(NOW() - INTERVAL 170 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf3.symbol = cry_fd.symbol " +
+            ") AS three_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf4.close order by id DESC), ',', 1) - substring_index(group_concat(crf4.open order by id ASC), ',', 1)) / substring_index(group_concat(crf4.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf4 " +
+            "WHERE crf4.start_date >= NOW() - INTERVAL 170 MINUTE " +
+            "AND crf4.end_date <= DATE_FORMAT(NOW() - INTERVAL 160 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf4.symbol = cry_fd.symbol " +
+            ") AS four_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf5.close order by id DESC), ',', 1) - substring_index(group_concat(crf5.open order by id ASC), ',', 1)) / substring_index(group_concat(crf5.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf5 " +
+            "WHERE crf5.start_date >= NOW() - INTERVAL 160 MINUTE " +
+            "AND crf5.end_date <= DATE_FORMAT(NOW() - INTERVAL 150 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf5.symbol = cry_fd.symbol " +
+            ") AS five_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf6.close order by id DESC), ',', 1) - substring_index(group_concat(crf6.open order by id ASC), ',', 1)) / substring_index(group_concat(crf6.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf6 " +
+            "WHERE crf6.start_date >= NOW() - INTERVAL 150 MINUTE " +
+            "AND crf6.end_date <= DATE_FORMAT(NOW() - INTERVAL 140 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf6.symbol = cry_fd.symbol " +
+            ") AS six_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf7.close order by id DESC), ',', 1) - substring_index(group_concat(crf7.open order by id ASC), ',', 1)) / substring_index(group_concat(crf7.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf7 " +
+            "WHERE crf7.start_date >= NOW() - INTERVAL 140 MINUTE " +
+            "AND crf7.end_date <= DATE_FORMAT(NOW() - INTERVAL 130 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf7.symbol = cry_fd.symbol " +
+            ") AS seven_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf8.close order by id DESC), ',', 1) - substring_index(group_concat(crf8.open order by id ASC), ',', 1)) / substring_index(group_concat(crf8.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf8 " +
+            "WHERE crf8.start_date >= NOW() - INTERVAL 130 MINUTE " +
+            "AND crf8.end_date <= DATE_FORMAT(NOW() - INTERVAL 120 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf8.symbol = cry_fd.symbol " +
+            ") AS eight_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf9.close order by id DESC), ',', 1) - substring_index(group_concat(crf9.open order by id ASC), ',', 1)) / substring_index(group_concat(crf9.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf9 " +
+            "WHERE crf9.start_date >= NOW() - INTERVAL 120 MINUTE " +
+            "AND crf9.end_date <= DATE_FORMAT(NOW() - INTERVAL 110 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf9.symbol = cry_fd.symbol " +
+            ") AS nine_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf10.close order by id DESC), ',', 1) - substring_index(group_concat(crf10.open order by id ASC), ',', 1)) / substring_index(group_concat(crf10.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf10 " +
+            "WHERE crf10.start_date >= NOW() - INTERVAL 110 MINUTE " +
+            "AND crf10.end_date <= DATE_FORMAT(NOW() - INTERVAL 100 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf10.symbol = cry_fd.symbol " +
+            ") AS ten_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf11.close order by id DESC), ',', 1) - substring_index(group_concat(crf11.open order by id ASC), ',', 1)) / substring_index(group_concat(crf11.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf11 " +
+            "WHERE crf11.start_date >= NOW() - INTERVAL 100 MINUTE " +
+            "AND crf11.end_date <= DATE_FORMAT(NOW() - INTERVAL 90 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf11.symbol = cry_fd.symbol " +
+            ") AS eleven_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf12.close order by id DESC), ',', 1) - substring_index(group_concat(crf12.open order by id ASC), ',', 1)) / substring_index(group_concat(crf12.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf12 " +
+            "WHERE crf12.start_date >= NOW() - INTERVAL 90 MINUTE " +
+            "AND crf12.end_date <= DATE_FORMAT(NOW() - INTERVAL 80 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf12.symbol = cry_fd.symbol " +
+            ") AS twelve_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf13.close order by id DESC), ',', 1) - substring_index(group_concat(crf13.open order by id ASC), ',', 1)) / substring_index(group_concat(crf13.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf13 " +
+            "WHERE crf13.start_date >= NOW() - INTERVAL 80 MINUTE " +
+            "AND crf13.end_date <= DATE_FORMAT(NOW() - INTERVAL 70 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf13.symbol = cry_fd.symbol " +
+            ") AS thirteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf14.close order by id DESC), ',', 1) - substring_index(group_concat(crf14.open order by id ASC), ',', 1)) / substring_index(group_concat(crf14.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf14 " +
+            "WHERE crf14.start_date >= NOW() - INTERVAL 70 MINUTE " +
+            "AND crf14.end_date <= DATE_FORMAT(NOW() - INTERVAL 60 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf14.symbol = cry_fd.symbol " +
+            ") AS foutreen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf15.close order by id DESC), ',', 1) - substring_index(group_concat(crf15.open order by id ASC), ',', 1)) / substring_index(group_concat(crf15.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf15 " +
+            "WHERE crf15.start_date >= NOW() - INTERVAL 60 MINUTE " +
+            "AND crf15.end_date <= DATE_FORMAT(NOW() - INTERVAL 50 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf15.symbol = cry_fd.symbol " +
+            ") AS fifteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf16.close order by id DESC), ',', 1) - substring_index(group_concat(crf16.open order by id ASC), ',', 1)) / substring_index(group_concat(crf16.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf16 " +
+            "WHERE crf16.start_date >= NOW() - INTERVAL 50 MINUTE " +
+            "AND crf16.end_date <= DATE_FORMAT(NOW() - INTERVAL 40 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf16.symbol = cry_fd.symbol " +
+            ") AS sixteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf17.close order by id DESC), ',', 1) - substring_index(group_concat(crf17.open order by id ASC), ',', 1)) / substring_index(group_concat(crf17.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf17 " +
+            "WHERE crf17.start_date >= NOW() - INTERVAL 40 MINUTE " +
+            "AND crf17.end_date <= DATE_FORMAT(NOW() - INTERVAL 30 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf17.symbol = cry_fd.symbol " +
+            ") AS seventeen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf18.close order by id DESC), ',', 1) - substring_index(group_concat(crf18.open order by id ASC), ',', 1)) / substring_index(group_concat(crf18.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf18 " +
+            "WHERE crf18.start_date >= NOW() - INTERVAL 30 MINUTE " +
+            "AND crf18.end_date <= DATE_FORMAT(NOW() - INTERVAL 20 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf18.symbol = cry_fd.symbol " +
+            ") AS eighteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf19.close order by id DESC), ',', 1) - substring_index(group_concat(crf19.open order by id ASC), ',', 1)) / substring_index(group_concat(crf19.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf19 " +
+            "WHERE crf19.start_date >= NOW() - INTERVAL 20 MINUTE " +
+            "AND crf19.end_date <= DATE_FORMAT(NOW() - INTERVAL 10 MINUTE, '%Y-%m-%d %H:%i:%59') " +
+            "AND crf19.symbol = cry_fd.symbol " +
+            ") AS nineteen_min_gain, " +
+            "( " +
+            "SELECT round((((substring_index(group_concat(crf20.close order by id DESC), ',', 1) - substring_index(group_concat(crf20.open order by id ASC), ',', 1)) / substring_index(group_concat(crf20.open order by id ASC), ',', 1)) * 100),6) " +
+            "FROM crypto_feed_extended crf20 " +
+            "WHERE crf20.start_date >= NOW() - INTERVAL 10 MINUTE " +
+            "AND crf20.end_date <= DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%59') " +
+            "AND crf20.symbol = cry_fd.symbol " +
+            ") AS twenty_min_gain " +
+            "  FROM crypto_feed_extended cry_fd  " +
+            "  WHERE cry_fd.start_date >= NOW() - INTERVAL 200 MINUTE " +
+            "  AND cry_fd.end_date <= NOW() " +
+            "  GROUP BY cry_fd.symbol  " +
+            "  HAVING percent_increase >= 1 " +
+            "  ORDER BY percent_increase DESC ";
+        //console.log(sql +' _________________ ');
+        db_connection.query(sql, function (err, rows) {
+            if (rows.length) {
+                json_data = JSON.stringify(rows);
+                //json_data = JSON.parse(json_data);
+                //console.log(json_data+' <br><br>');
+
+                io.emit('fetch_gain_table_data_v3', json_data);
+            }
+        });
+    }
+    // =================== update GAIN TABLE 10 MIN - END ================
+
 
 });
 
