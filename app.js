@@ -1,13 +1,5 @@
 var express = require('express');
 var socket = require('socket.io');
-
-const { formatMessage, formatMessageObject, formatMessageRoom, save_message_db, get_gain_chart_data } = require('./utils/messages');
-const {
-    userJoin,
-    getCurrentUser,
-    userLeave,
-    getRoomUsers
-} = require('./utils/users');
 const botName = 'Crypto Exchnage WebSocket';
 
 var path = require('path');
@@ -22,6 +14,8 @@ var login = require('./routes/login');
 var logout = require('./routes/logout');
 var signup = require('./routes/signup');
 var messenger = require('./routes/messenger');
+var binance = require('./routes/binance');
+
 const db_connection = require('./connections');
 
 var app = express();
@@ -42,9 +36,9 @@ app.use(session({
 
 app.use(
     connection(mysql, {
-        host: 'localhost',
-        user: 'root',
-        password: '',
+        host: 'crypto-exchange.cvcoxaxglrwq.us-east-1.rds.amazonaws.com',
+        user: 'admin',
+        password: 'sVEH0VWtkOgb7LjGc4A2',
         port: 3306, //port mysql
         database: 'cryptowebsocket'
     }, 'request')
@@ -81,8 +75,14 @@ app.get('/gain_chart', messenger);
 app.get('/gain_table', messenger);
 app.get('/gain_table_v2', messenger);
 //app.get('/gain_table_v3', messenger);
-
 app.post('/get_detail_charts_data', messenger);
+
+app.get('/balance', binance);
+app.post('/get_balances', binance);
+
+app.get('/order_history', binance);
+app.post('/get_order_history', binance);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -110,13 +110,8 @@ var server = app.listen(1337, function(){
     console.log('Ready on port 1337 For Crypto-Exchange With WebSockets');
 });
 
-
 var users = [];
 var users_room = [];
-
-//******** Get all users **********
-
-//******** Get all users **********
 
 // Socket setup & pass server
 var io = socket(server);

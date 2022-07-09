@@ -11,8 +11,11 @@
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
     "express": "~4.14.0",
+    "express-myconnection": "^1.0.4",
     "express-session": "^1.7.6",
     "morgan": "~1.7.0",
+    "mysql": "^2.18.1",
+    "node-binance-api": "^0.13.1",
     "serve-favicon": "~2.3.0",
     "socket.io": "^2.1.0"
   }

@@ -22,10 +22,17 @@
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/plugins.css">
 <link rel="stylesheet" href="css/themes/theme-1.css" id="skin_color" />
-<script src="/js/moment.js"></script>
+
+<!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
+<link href="vendor/select2/select2.min.css" rel="stylesheet" media="screen">
+<link href="vendor/DataTables/css/DT_bootstrap.css" rel="stylesheet" media="screen">
+<!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
+
 <!-- end: CLIP-TWO CSS -->
 <!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
 <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
+
+<script src="/js/moment.js"></script>
 </head>
 <!-- end: HEAD -->
 <body>
@@ -133,6 +140,33 @@
                                 </div>
                             </div>
                         </a>
+                    </li>
+
+                    <li <% if(typeof route_name !== 'undefined' && (route_name == 'balance' || route_name == 'order_history' )) { %> class="active open" <% } %> >
+                        <a href="javascript:void(0)">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-layout-grid2"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> Binance </span><i class="icon-arrow"></i>
+                                </div>
+                            </div>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/balance">
+                                    <span class="title">Balances</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="/order_history">
+                                    <span class="title">Order History</span>
+                                </a>
+                            </li>
+
+                        </ul>
                     </li>
 
 
