@@ -36,9 +36,9 @@ app.use(session({
 
 app.use(
     connection(mysql, {
-        host: 'localhost',
-        user: 'root',
-        password: '',
+        host: 'crypto-exchange.cvcoxaxglrwq.us-east-1.rds.amazonaws.com',
+        user: 'admin',
+        password: 'sVEH0VWtkOgb7LjGc4A2',
         port: 3306, //port mysql
         database: 'cryptowebsocket'
     }, 'request')
@@ -74,7 +74,7 @@ app.get('/dashboard', messenger);
 app.get('/gain_chart', messenger);
 app.get('/gain_table', messenger);
 app.get('/gain_table_v2', messenger);
-//app.get('/gain_table_v3', messenger);
+app.get('/gain_table_v3', messenger);
 app.post('/get_detail_charts_data', messenger);
 
 app.get('/balance', binance);
@@ -83,6 +83,9 @@ app.post('/get_balances', binance);
 app.get('/order_history', binance);
 app.post('/get_order_history', binance);
 
+
+app.get('/market_order', binance);
+app.post('/send_market_order', binance);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

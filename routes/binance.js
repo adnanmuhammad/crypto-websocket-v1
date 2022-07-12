@@ -3,8 +3,8 @@ var router = express.Router();
 
 const Binance = require('node-binance-api');
 const binance = new Binance().options({
-    APIKEY: '',
-    APISECRET: ''
+    APIKEY: 'pk26io9YonoaNrpH6GPN9frBqBA9xJqIXG2Fwtx2QvgYOinbHSgXRgjelCDbhxJL',
+    APISECRET: 'F8eO0hoOts87nysK3N04HLVtoJSIaHreIYqVFnNtINb8xnJrj20u6Atpx8dV5TcQ'
 });
 
 router.get('/balance', function (req, res, next)
@@ -136,6 +136,155 @@ router.post('/get_order_history', function (req, res, next) {
 
 });
 });
+
+// ================ Trade ==================
+router.get('/market_order', function (req, res, next)
+{
+    if(req.session && req.session.username) {
+        var data = new Object();
+        if(req.session.username) {
+            data.username = req.session.username;
+            data.userid = req.session.userid;
+            data.phone_no = req.session.phone_no;
+            data.route_name = 'market_order';
+        }
+        res.render('market_order', data);
+    } else {
+        res.redirect('/login');
+    }
+});
+
+
+router.post('/send_market_order', function (req, res, next) {
+    var response_return = new Object();
+
+    var market      = req.body.market;
+    var currency    = req.body.currency;
+    var quantity    = req.body.quantity;
+
+    var err_msg = '';
+    if(market.trim() === '') {
+        err_msg += 'Market field is requred. <br>';
+    }
+
+    if(currency.trim() === '') {
+        err_msg += 'Currency field is requred. <br>';
+    }
+
+    if(quantity.trim() === '') {
+        err_msg += 'Quantity field is requred. <br>';
+    }
+
+    if(err_msg !== '') {
+        response_return.error = true;
+        response_return.message = err_msg;
+        res.end(JSON.stringify(response_return));
+        return false;
+    }
+    //console.log(market+'______'+currency+'______'+quantity);
+
+
+    var symbol = currency+''+market;
+
+    binance.prices(symbol, (error, ticker) => {
+        //console.info("Price of " + symbol + ":", ticker.BONDUSDT);
+        var price = ticker[symbol];
+        //console.info("Price of " + symbol + ":", price );
+     });
+
+    binance.exchangeInfo((error, response) => {
+        if ( error ) console.error(error);
+
+        //console.log(response);
+        //console.log(response.symbols);
+        //var baseAssetPrecision = response['symbols'][symbol]['baseAssetPrecision'];
+        //console.log('________ baseAssetPrecision ___________'+baseAssetPrecision);
+
+        for ( var obj of response.symbols ) {
+            if(obj.symbol == symbol) {
+                var baseAssetPrecision = obj.baseAssetPrecision;
+                //console.log(symbol + '________ baseAssetPrecision ___________'+baseAssetPrecision);
+
+                for (var filter of obj.filters ) {
+                    if ( filter.filterType == "LOT_SIZE" ) {
+                        var stepSize = filter.stepSize;
+                        //console.log('______stepSize________:'+stepSize);
+                        //console.log('______minQty________:'+filter.minQty);
+                        //console.log('______maxQty________:'+filter.maxQty);
+                    }
+                }
+
+                setTimeout(function(){
+                    if (typeof stepSize !== 'undefined') {
+                        // Round to stepSize
+                        amount = binance.roundStep(quantity, stepSize);
+                        //console.log('_____ AMOUNT________ ' + amount);
+
+                        // ========== BUY ==============
+                        binance.marketBuy(symbol, amount, (error, response) => {
+
+                            if(error) {
+                                //console.log('_____ERROR______' + error.body);
+                                response_return.error = true;
+                                //response_return.message = 'Market order unsuccessfull';
+                                response_return.message = error.body;
+                                res.end(JSON.stringify(response_return));
+                            }
+
+                            //console.info("Market Buy response", response);
+                            //console.info("order id: " + response.orderId);
+                            // Now you can limit sell with a stop loss, etc.
+
+
+                            //=========== Insert in DB ================
+                            req.getConnection(function (err, connection) {
+                                var query = "INSERT INTO bin_orders (bo_symbol, bo_orderId, bo_clientOrderId, bo_transactTime, bo_price, bo_origQty, bo_executedQty, bo_status, bo_type, bo_side) VALUES ('" + response.symbol + "' , '" + response.orderId + "' , '" + response.clientOrderId + "', '" + response.transactTime + "', '" + response.price + "', '" + response.origQty + "' , '" + response.executedQty + "', '" + response.status + "', '" + response.type + "', '" + response.side + "' )";
+                                connection.query(query, function (err, rows) {
+                                    if (err){
+                                        //console.log("Error Selecting : %s ", err);
+                                        response_return.error = true;
+                                        response_return.message = 'Market order unsuccessfull';
+                                        res.end(JSON.stringify(response_return));
+                                    }else{
+                                        //console.log("New User added successfully");
+                                        response_return.success = true;
+                                        response_return.message = 'Market Order Placed Successfully.';
+                                        res.end(JSON.stringify(response_return));
+                                    }
+                                    //res.render('customers', {page_title: "Customers - Node.js", data: rows});
+                                });
+                            });
+                            //=========== Insert in DB ================
+
+                        });
+                        // ========== BUY ==============
+
+
+                    }
+                }, 500);
+
+            }
+
+            //filters.baseAssetPrecision = obj.baseAssetPrecision;
+            //filters.quoteAssetPrecision = obj.quoteAssetPrecision;
+        }
+
+
+    });
+
+    /*binance.prices(symbol, (error, ticker) => {
+        //console.info("Price of " + symbol + ":", ticker.BONDUSDT);
+
+        var price = ticker[symbol];
+        console.info("Price of " + symbol + ":", price );
+
+    });*/
+
+
+});
+
+// ================ Trade ==================
+
 
 function unixtime_to_datetime(timestamp) {
     var datetime;

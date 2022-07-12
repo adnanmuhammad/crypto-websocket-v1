@@ -116,18 +116,18 @@
                         </a>
                     </li>
 
-                    <!--<li <% /*if(typeof route_name !== 'undefined' && route_name == 'gain_table_v3') {*/ %> class="active open" <% /*}*/ %> >-->
-                        <!--<a href="/gain_table_v3">-->
-                            <!--<div class="item-content">-->
-                                <!--<div class="item-media">-->
-                                    <!--<i class="ti-pie-chart"></i>-->
-                                <!--</div>-->
-                                <!--<div class="item-inner">-->
-                                    <!--<span class="title"> GAIN TABLE 10-MIN </span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</a>-->
-                    <!--</li>-->
+                    <li <% if(typeof route_name !== 'undefined' && route_name == 'gain_table_v3') { %> class="active open" <% } %> >
+                        <a href="/gain_table_v3">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-pie-chart"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> GAIN TABLE 10-MIN </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
 
                     <li <% if(typeof route_name !== 'undefined' && route_name == 'users') { %> class="active open" <% } %> >
                         <a href="/users">
@@ -166,6 +166,26 @@
                                 </a>
                             </li>
 
+                        </ul>
+                    </li>
+
+                    <li <% if(typeof route_name !== 'undefined' && (route_name == 'market_order')) { %> class="active open" <% } %> >
+                        <a href="javascript:void(0)">
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="ti-layout-grid2"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <span class="title"> Trade </span><i class="icon-arrow"></i>
+                                </div>
+                            </div>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/market_order">
+                                    <span class="title">Market Order</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
