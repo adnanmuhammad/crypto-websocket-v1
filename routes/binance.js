@@ -3,8 +3,8 @@ var router = express.Router();
 
 const Binance = require('node-binance-api');
 const binance = new Binance().options({
-    APIKEY: 'pk26io9YonoaNrpH6GPN9frBqBA9xJqIXG2Fwtx2QvgYOinbHSgXRgjelCDbhxJL',
-    APISECRET: 'F8eO0hoOts87nysK3N04HLVtoJSIaHreIYqVFnNtINb8xnJrj20u6Atpx8dV5TcQ'
+    APIKEY: '',
+    APISECRET: ''
 });
 
 router.get('/balance', function (req, res, next)
