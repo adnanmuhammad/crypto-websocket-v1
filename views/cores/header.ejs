@@ -169,7 +169,7 @@
                         </ul>
                     </li>
 
-                    <li <% if(typeof route_name !== 'undefined' && (route_name == 'market_order')) { %> class="active open" <% } %> >
+                    <li <% if(typeof route_name !== 'undefined' && (route_name == 'market_order' || route_name == 'oco_orders' || route_name == 'market_plus_oco')) { %> class="active open" <% } %> >
                         <a href="javascript:void(0)">
                             <div class="item-content">
                                 <div class="item-media">
@@ -186,7 +186,18 @@
                                     <span class="title">Market Order</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="/oco_orders">
+                                    <span class="title">OCO Orders</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/market_plus_oco">
+                                    <span class="title">Market + OCO Orders</span>
+                                </a>
+                            </li>
                         </ul>
+
                     </li>
 
 

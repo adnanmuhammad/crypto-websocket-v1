@@ -1,8 +1,8 @@
 var mysql_obj = require('mysql');
 
 var db_connection = mysql_obj.createConnection({
-    host     : '',
-    user     : '',
+    host     : 'localhost',
+    user     : 'root',
     password : '',
     port: 3306, //port mysql
     database : 'cryptowebsocket'

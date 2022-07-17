@@ -68,10 +68,44 @@
                         </form>
                     </div>
                     <!-- end: REGISTER BOX -->
+
+
+                    <!-- start: DYNAMIC TABLE -->
+                    <div class="container-fluid container-fullw bg-white">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Trades History</h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                                    <thead>
+                                    <tr>
+                                        <th>Sr #</th>
+                                        <th>Order ID</th>
+                                        <th>Ordered At</th>
+                                        <th>Market</th>
+                                        <th>Currency</th>
+                                        <th>Purchase Unit Price</th>
+                                        <th>Unit Purchased</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end: DYNAMIC TABLE -->
+
+
                 </div>
             </div>
             <!-- end: REGISTRATION -->
-
 
 
         </div>
@@ -80,6 +114,81 @@
      <% include cores/footer.ejs %>
 
     <script>
+
+        // ==========  LOAD Grid Data ===========
+        $(document).ready(function() {
+            var mybal = [];
+
+            $.ajax({
+                url: "http://3.236.53.56:1337/get_market_order_data",
+                method: "POST",
+                data: {},
+                success: function (response) {
+                    var html = "";
+                    $('#sample_1 > tbody').html('');
+
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        //console.log(result);
+
+                        Object.entries(result.orders).forEach((entry) => {
+                            const [key, value] = entry;
+
+                            value.market = 'USDT';
+                            var currency = value.bo_symbol;
+                            currency = currency.replace('USDT', '');
+                            value.currency = currency;
+                            value.amount = parseFloat(parseFloat(value.bo_price) * parseFloat(value.bo_origQty)).toFixed(6);
+                            value.bo_price = parseFloat(value.bo_price).toFixed(6);
+                            value.bo_origQty = parseFloat(value.bo_origQty).toFixed(6);
+                            mybal.push(value);
+                        });
+
+                        //console.log(' --------ADNAN 123---------- ');
+                        /*Object.entries(result.balances).forEach((entry) => {
+                            const [key, value] = entry;
+                            if (value.available > 0 || value.onOrder > 0) {
+                                value.asset = key;
+                                value.total = parseFloat(parseFloat(value.available) + parseFloat(value.onOrder));
+
+                                mybal.push(value);
+                                //console.log(`${key}: ${value.available}`);
+                            }
+                        });
+                        */
+                    }
+                    // console.log(mybal);
+
+                    $('#sample_1').DataTable().destroy();
+                    $('#sample_1').DataTable({
+                        data: mybal,
+                        columns: [
+                            {
+                                render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'bo_orderId' },
+                            { data: 'date_time' },
+                            { data: 'market' },
+                            { data: 'currency' },
+                            { data: 'bo_price' },
+                            { data: 'bo_origQty' },
+                            { data: 'amount' }
+
+                        ],
+                        columnDefs: [{
+                            orderable: true,
+                            targets: [0, 1, 2]
+                        }]
+                    });
+
+
+                }
+            });
+        });
+        // ==========  LOAD Grid Data ===========
+
         $('body').on('click', '#btn-submit', function() {
             $('#btn-submit').prop('disabled', true);
             var market      = $("#market").val();
@@ -109,4 +218,5 @@
                 }
             });
         });
+
     </script>

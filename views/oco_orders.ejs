@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!-- Template Name: Clip-Two - Responsive Admin Template build with Twitter Bootstrap 3.x | Author: ClipTheme -->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- start: HEAD -->
+<head>
+    <title>OCO Orders</title>
+
+    <% include cores/header.ejs %>
+
+    <div class="main-content" >
+        <div class="wrap-content container" id="container" style="width: 100% !important;">
+            <!-- start: DASHBOARD TITLE -->
+            <section id="page-title" class="padding-top-15 padding-bottom-15" style="">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h1 class="mainTitle" style="background-image: none !important;">OCO Orders</h1>
+                    </div>
+                </div>
+            </section>
+            <!-- end: DASHBOARD TITLE -->
+
+
+            <div class="container-fluid container-fullw bg-white">
+
+                <div class="alert alert-success" role="alert" style="display: none;">
+                    Market Order Placed Successfully.
+                </div>
+
+                <div class="alert alert-danger alert-error" role="alert" style="display: none;">
+                    Something went wrong, Market order not placed.
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+
+
+
+                                <form class="form-register" method="POST" id="signup-form" action="" enctype="multipart/form-data">
+                                    <fieldset>
+                                    <legend>
+                                        OCO Sell Form
+                                    </legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>
+                                                    Market
+                                                </label>
+                                                <select name="market" id="market" class="form-control show-tick ms select2">
+                                                    <option value="USDT" selected>USDT</option>
+                                                    <option value="BUSD">BUSD</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Currency
+                                                </label>
+                                                <input type="text" class="form-control" name="currency" id="currency" placeholder="Currency" readonly required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Current Rate
+                                                </label>
+                                                <input type="text" class="form-control" name="current" id="current" placeholder="Current Rate" readonly required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Price
+                                                </label>
+                                                <input type="text" class="form-control" name="price" id="price" placeholder="Price" readonly required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    &nbsp;
+                                                </label>
+                                                <input type="text" class="form-control" name="pricePer" id="pricePer" placeholder="i.e 1" value="1" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                                %
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Stop
+                                                </label>
+                                                <input type="text" class="form-control" name="stop" id="stop" placeholder="Stop" readonly required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    &nbsp;
+                                                </label>
+                                                <input type="text" class="form-control" name="stopPer" id="stopPer" placeholder="i.e 2" value="2" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                                %
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Limit
+                                                </label>
+                                                <input type="text" class="form-control" name="limit" id="limit" placeholder="Limit" readonly required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    &nbsp;
+                                                </label>
+                                                <input type="text" class="form-control" name="limitPer" id="limitPer" placeholder="i.e 2.1"  value="2.1" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                                %
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Amount
+                                                </label>
+                                                <input type="text" class="form-control" name="amount" id="amount" placeholder="Amount" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-primary" id="btn-submit">
+                                                Send Order <i class="fa fa-arrow-circle-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                </form>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- start: DYNAMIC TABLE -->
+            <div class="container-fluid container-fullw bg-white">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                            <thead>
+                            <tr>
+                                <th>Sr #</th>
+                                <th>Currency</th>
+                                <th>Units</th>
+                                <th>Unit Price USDT</th>
+                                <th>Total value in USDT</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- end: DYNAMIC TABLE -->
+
+
+
+        </div>
+    </div>
+
+     <% include cores/footer.ejs %>
+
+    <script>
+        jQuery(document).ready(function() {
+            TableData.init();
+        });
+    </script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            get_oco_current_free_balances();
+
+
+            //on keyup, start the countdown
+
+            $("#pricePer").on("keyup change", function(e) {
+                console.log(parseInt($("#pricePer").val()));
+                if ($('#current').val()) {
+                    var current = parseFloat($('#current').val());
+                    var pricePer = parseFloat($("#pricePer").val());
+                    var price = current + (((current * pricePer) / 100));
+                    $("#price").val(parseFloat(price).toFixed(6));
+                }
+            });
+            $('#stopPer').keyup(function() {
+                if ($('#current').val()) {
+                    var current = parseFloat($('#current').val());
+                    var stopPer = parseFloat($("#stopPer").val());
+                    if (stopPer > 0) {
+                        var stop = current - ((current * stopPer) / (100));
+                        $("#stop").val(parseFloat(stop).toFixed(6))
+                    }
+                }
+            });
+            $('#limitPer').keyup(function() {
+                if ($('#current').val()) {
+                    var current = parseFloat($('#current').val());
+                    var limitPer = parseFloat($("#limitPer").val());
+                    if (limitPer > 0) {
+                        var limit = current - ((current * limitPer) / (100));
+                        $("#limit").val(parseFloat(limit).toFixed(6))
+                    }
+                }
+            });
+
+
+        });
+
+        function get_oco_current_free_balances() {
+            var market      = $("#market").val();
+            var mybal = [];
+
+            $.ajax({
+                url: "http://3.236.53.56:1337/get_oco_current_free_balances",
+                method: "POST",
+                data: {market: market},
+                success: function (response) {
+                    var html = "";
+                    $('#sample_1 > tbody').html('');
+
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        //console.log(' --------ADNAN 123---------- ');
+                        Object.entries(result.balances).forEach((entry) => {
+                            const [key, value] = entry;
+                            if (value.available > 0 || value.onOrder > 0) {
+                                value.asset = key;
+
+                                if(value.price !== '') {
+                                    value.total = parseFloat(parseFloat(value.available) * parseFloat(value.price)).toFixed(8);
+                                } else {
+                                    value.total = parseFloat(value.available).toFixed(8);
+                                }
+
+                                mybal.push(value);
+                                //console.log(`${key}: ${value.available}`);
+                            }
+                        });
+
+                    }
+                    //console.log(mybal);
+
+                    $('#sample_1').DataTable().destroy();
+                    $('#sample_1').DataTable({
+                        data: mybal,
+                        columns: [
+                            {
+                                render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            { data: 'asset' },
+                            { data: 'available' },
+                            { data: 'price' },
+                            { data: 'total' },
+
+                            {
+                                render: function(data, type, row) {
+                                        var sting =
+                                            '<a class="cls_currency_act" data-currency='+row.asset+'  data-available='+row.available+'>Select</a> ';
+
+                                        if(row.price !== '') {
+                                            return sting;
+                                        } else {
+                                            return '';
+                                        }
+                                    }
+                            },
+
+                        ],
+                        columnDefs: [{
+                            orderable: true,
+                            targets: [0, 1, 2]
+                        }]
+                    });
+
+
+                }
+            });
+        }
+
+
+        $('body').on('click', '.cls_currency_act', function() {
+            var currency = $(this).data('currency');
+            var available = $(this).data('available');
+            //alert(currency +'_________'+available);
+
+            $("#currency").val(currency);
+            $("#amount").val((toFixedTrunc(available, 6)));
+            currencyBalance();
+        });
+
+        function currencyBalance() {
+            var currency = $("#currency").val();
+            var market = $("#market").val();
+
+            $.ajax({
+                url: "http://3.236.53.56:1337/get_specific_currency_balance",
+                method: "POST",
+                data: {currency: currency, market: market},
+                success: function (response) {
+                    console.log(response);
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        $('#current').val((toFixedTrunc(result.price, 6)));
+
+                        var pricePer = parseFloat($("#pricePer").val());
+                        var limitPer = parseFloat($("#limitPer").val());
+                        var stopPer = parseFloat($("#stopPer").val());
+                        var current = parseFloat($('#current').val());
+                        var price = 0;
+                        var stop = 0;
+                        var limit = 0;
+                        //console.log([pricePer, limitPer, stopPer]);
+                        if (pricePer > 0 && current > 0) {
+                            price = current + ((current * pricePer) / 100);
+                        }
+                        if (stopPer > 0 && current > 0) {
+                            stop = current - ((current * stopPer) / (100));
+                        }
+                        if (limitPer > 0 && current > 0) {
+                            limit = current - ((current * limitPer) / (100));
+                        }
+                        //console.log([price, limit, stop]);
+                        $("#price").val(parseFloat(price).toFixed(6));
+                        $("#limit").val(parseFloat(limit).toFixed(6));
+                        $("#stop").val(parseFloat(stop).toFixed(6));
+                    } else if (result.hasOwnProperty('error')) {
+                        $(".alert-error").html(result.message);
+                        $(".alert-error").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-error").slideUp(1000);
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+        $('body').on('click', '#btn-submit', function() {
+            $('#btn-submit').prop('disabled', true);
+
+            var market      = $("#market").val();
+            var currency    = $("#currency").val();
+            var price       = $("#price").val();
+            var limit       = $("#limit").val();
+            var stop        = $("#stop").val();
+            var amount      = $("#amount").val();
+
+            $.ajax({
+                url: "http://3.236.53.56:1337/send_oco_order",
+                method: "POST",
+                data: {market: market, currency: currency, price: price, limit: limit, stop: stop, amount: amount},
+                success: function (response) {
+                    //console.log(response);
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        $(".alert-success").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-success").slideUp(1000);
+                            window.location.href = "http://3.236.53.56:1337/oco_orders";
+                        });
+                    } else if (result.hasOwnProperty('error')) {
+                        //console.log(result);
+                        $(".alert-error").html(result.message);
+                        $(".alert-error").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-error").slideUp(1000);
+                        });
+                        $('#btn-submit').prop('disabled', false);
+                    }
+                }
+            });
+        });
+
+
+        function toFixedTrunc(x, n) {
+            const v = (typeof x === 'string' ? x : x.toString()).split('.');
+            if (n <= 0) return v[0];
+            let f = v[1] || '';
+            if (f.length > n) return `${v[0]}.${f.substr(0,n)}`;
+            while (f.length < n) f += '0';
+            return `${v[0]}.${f}`
+        }
+
+    </script>

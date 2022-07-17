@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!-- Template Name: Clip-Two - Responsive Admin Template build with Twitter Bootstrap 3.x | Author: ClipTheme -->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html class="ie9" lang="en"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- start: HEAD -->
+<head>
+    <title>Market + OCO Order</title>
+
+    <% include cores/header.ejs %>
+
+    <div class="main-content" >
+        <div class="wrap-content container" id="container" style="width: 100% !important;">
+            <!-- start: DASHBOARD TITLE -->
+            <section id="page-title" class="padding-top-15 padding-bottom-15" style="">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <h1 class="mainTitle" style="background-image: none !important;">Market + OCO Order</h1>
+                    </div>
+                </div>
+            </section>
+            <!-- end: DASHBOARD TITLE -->
+
+
+            <!-- start: REGISTRATION -->
+            <div class="row">
+                <div class="main-login col-xs-12">
+                    <!-- start: REGISTER BOX -->
+                    <div class="box-register">
+
+                        <div class="alert alert-success" role="alert" style="display: none;">
+                            Market Plus OCO Order Placed Successfully.
+                        </div>
+
+                        <div class="alert alert-danger alert-error" role="alert" style="display: none;">
+                            Something went wrong, Market Plus OCO order not placed.
+                        </div>
+
+                        <form class="form-register" method="POST" id="signup-form" action="" enctype="multipart/form-data">
+                            <fieldset>
+                                <legend>
+                                    MARKET ORDER INPUT
+                                </legend>
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <select name="market" id="market" class="form-control show-tick ms select2">
+                                                <option value="USDT" selected>USDT</option>
+                                                <option value="BUSD">BUSD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <strong id="marketAvail" style="font-size: 22px; color: #dd1144; font-weight: bold; border-style: solid; border-width: 3px; padding: 5px;"></strong>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="currency" id="currency" placeholder="Type desired currency" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Type quantity in Market value" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+
+                            <fieldset>
+                                <legend>
+                                    OCO ORDER INPUT
+                                </legend>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Price
+                                            </label>
+                                            <input type="text" class="form-control" name="pricePer" id="pricePer" placeholder="i.e 1" value="1" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                            %
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Stop
+                                            </label>
+                                            <input type="text" class="form-control" name="stopPer" id="stopPer" placeholder="i.e 2" value="2" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                            %
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Limit
+                                            </label>
+                                            <input type="text" class="form-control" name="limitPer" id="limitPer" placeholder="i.e 2.1"  value="2.1" required style="border-width: 1px; border-color: #dd1144; border-style: solid;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="margin-top: 25px; font-weight: bold; font-size: 20px; color: black;">
+                                            %
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary pull-right" id="btn-submit">
+                                        Send Order <i class="fa fa-arrow-circle-right"></i>
+                                    </button>
+                                </div>
+
+                            </fieldset>
+
+                        </form>
+                    </div>
+                    <!-- end: REGISTER BOX -->
+                </div>
+            </div>
+            <!-- end: REGISTRATION -->
+
+
+
+        </div>
+    </div>
+
+     <% include cores/footer.ejs %>
+
+    <script>
+
+        $(document).ready(function() {
+            currencyBalance('USDT');
+            //on keyup, start the countdown
+            $('#market').change(function () {
+                currencyBalance($(this).val());
+            });
+
+        });
+
+        $('body').on('click', '#btn-submit', function() {
+            $('#btn-submit').prop('disabled', true);
+            var market      = $("#market").val();
+            var currency    = $("#currency").val();
+            var quantity    = $("#quantity").val();
+
+            var pricePer       = $("#pricePer").val();
+            var limitPer       = $("#limitPer").val();
+            var stopPer        = $("#stopPer").val();
+
+            $.ajax({
+                url: "http://3.236.53.56:1337/send_market_plus_oco_order",
+                method: "POST",
+                data: {market: market, currency: currency, quantity: quantity, pricePer: pricePer, limitPer: limitPer, stopPer: stopPer},
+                success: function (response) {
+                    //console.log(response);
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        $(".alert-success").html(result.message);
+                        $(".alert-success").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-success").slideUp(1000);
+                            window.location.href = "http://3.236.53.56:1337/market_plus_oco";
+                        });
+                    } else if (result.hasOwnProperty('error')) {
+                        //console.log(result);
+                        $(".alert-error").html(result.message);
+                        $(".alert-error").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-error").slideUp(1000);
+                        });
+                        $('#btn-submit').prop('disabled', false);
+                    }
+                }
+            });
+        });
+
+        function currencyBalance(market) {
+            $.ajax({
+                url: "http://3.236.53.56:1337/get_market_available_balance",
+                method: "POST",
+                data: {market: market},
+                success: function (response) {
+                    //console.log(response);
+                    result = JSON.parse(response);
+                    if (result.hasOwnProperty('success')) {
+                        $('#marketAvail').html((parseFloat(result.available_bal)).toFixed(2));
+                    } else if (result.hasOwnProperty('error')) {
+                        //console.log(result);
+                        $(".alert-error").html(result.message);
+                        $(".alert-error").fadeTo(2000, 1000).slideUp(1000, function() {
+                            $(".alert-error").slideUp(1000);
+                        });
+                    }
+                }
+            });
+
+        }
+
+
+    </script>

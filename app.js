@@ -36,8 +36,8 @@ app.use(session({
 
 app.use(
     connection(mysql, {
-        host: '',
-        user: '',
+        host: 'localhost',
+        user: 'root',
         password: '',
         port: 3306, //port mysql
         database: 'cryptowebsocket'
@@ -86,6 +86,17 @@ app.post('/get_order_history', binance);
 
 app.get('/market_order', binance);
 app.post('/send_market_order', binance);
+app.post('/get_market_order_data', binance);
+
+app.get('/oco_orders', binance);
+app.post('/get_oco_current_free_balances', binance);
+app.post('/get_specific_currency_balance', binance);
+app.post('/send_oco_order', binance);
+
+app.get('/market_plus_oco', binance);
+app.post('/get_market_available_balance', binance);
+app.post('/send_market_plus_oco_order', binance);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
